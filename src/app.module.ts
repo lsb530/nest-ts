@@ -1,16 +1,22 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import typeOrmConfig from '../TypeOrmConfig';
-import { DataSource } from 'typeorm';
-import { BoardController } from './board/controller/board.controller';
-import { BoardService } from './board/service/board.service';
+import { Module, ValidationPipe } from '@nestjs/common'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { DataSource } from 'typeorm'
+import { UserModule } from './domain/user/module/user.module'
+import typeOrmConfig from './config/TypeOrmConfig'
+import { APP_PIPE } from '@nestjs/core'
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeOrmConfig)],
-  controllers: [AppController, BoardController],
-  providers: [AppService, BoardService],
+  imports: [TypeOrmModule.forRoot(typeOrmConfig), UserModule],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}
