@@ -4,10 +4,15 @@ import { ConfigService } from '@nestjs/config'
 
 @Controller()
 export class AppController {
+  private readonly null_check
+  private readonly not_null_check
   constructor(
     private readonly appService: AppService,
     private readonly configService: ConfigService
-  ) {}
+  ) {
+    this.null_check = configService.getOrThrow('NULL_CHECK')
+    this.not_null_check = configService.getOrThrow('NOT_NULL_CHECK')
+  }
 
   @Get()
   getHello(): any {
@@ -61,6 +66,11 @@ export class AppController {
     // 대체변수
     const substitutedVar = this.configService.get<string>('database.test', 'handsome-boki')
     console.info('substitutedVar', substitutedVar)
+  }
+
+  @Get('db4')
+  envTest2(): any {
+    console.info('this.not_null_check', this.not_null_check)
   }
 }
 
