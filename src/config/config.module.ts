@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import databaseConfig from './databaseConfig'
+import yamlConfig from './yamlConfig'
 
 function getEnvFilePath() {
   switch (process.env.NODE_ENV) {
@@ -19,7 +20,7 @@ function getEnvFilePath() {
       cache: true,
       isGlobal: true,
       envFilePath: [getEnvFilePath(), '.env'],
-      load: [databaseConfig],
+      load: [databaseConfig, yamlConfig],
     }),
   ],
 })

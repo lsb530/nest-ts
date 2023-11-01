@@ -83,6 +83,14 @@ export class AppController {
     const t = n1 + 300
     console.info('t', t)
   }
+
+  @Get('env2')
+  envTesting(): any {
+    const host = this.configService.get<string>('http.host')
+    console.info('host', host)
+    const port = this.configService.get<string>('http.port')
+    console.info('port', port)
+  }
 }
 
 interface DbConfig {
