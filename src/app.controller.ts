@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config'
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {}
 
   @Get()
@@ -28,4 +28,44 @@ export class AppController {
     const height = this.configService.get<string>('HEIGHT')
     console.info('height', height)
   }
+
+  @Get('db1')
+  envDbTest1(): any {
+    const dbHost = this.configService.get<string>('DATABASE_HOST')
+    const dbUser = this.configService.get<string>('DATABASE_USER')
+    const dbPort = this.configService.get<number>('DATABASE_PORT')
+
+    console.info('dbHost', dbHost)
+    console.info('dbUser', dbUser)
+    console.info('dbPort', dbPort)
+  }
+
+  @Get('db2')
+  envDbTest2(): any {
+    // load파일에서 불러들인 변수들
+    const dbHost = this.configService.get<string>('database.host')
+    const dbUser = this.configService.get<string>('database.user')
+    const dbPort = this.configService.get<string>('database.port')
+
+    console.info('dbHost', dbHost)
+    console.info('dbUser', dbUser)
+    console.info('dbPort', dbPort)
+  }
+
+  @Get('db3')
+  envDbTest3(): any {
+    // load파일에서 불러들인 변수들을 인터페이스로 만들어서 사용
+    const databaseConfig = this.configService.get<DbConfig>('database')
+    console.info('databaseConfig', databaseConfig)
+
+    // 대체변수
+    const substitutedVar = this.configService.get<string>('database.test', 'handsome-boki')
+    console.info('substitutedVar', substitutedVar)
+  }
+}
+
+interface DbConfig {
+  host: string
+  user: string
+  port: number
 }
